@@ -10,7 +10,9 @@ pipeline {
 
         stage('Test'){
             //Here should go the test
-            echo "Test Stage"
+            steps{
+                echo "Test Stage"
+            }
         }
     }
 }
