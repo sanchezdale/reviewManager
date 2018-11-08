@@ -34,10 +34,12 @@ pipeline {
             }
         }
         
-    } post{
-                success {
-                junit '**/target/surefire-reports/TEST*.xml'
-                archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
-                }
+    } 
+    
+    post{
+        success {
+            junit '**/target/surefire-reports/TEST*.xml'
+            archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
             }
+        }
 }
