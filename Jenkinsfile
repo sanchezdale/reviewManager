@@ -24,11 +24,6 @@ pipeline {
                 sh 'mvn test'
                 }
             }
-            post{
-                success {
-                junit '**/target/surefire-reports/TEST*.xml'
-                }
-            }
         }
 
         stage('Build'){
@@ -39,5 +34,10 @@ pipeline {
             }
         }
         
-    }
+    } post{
+                success {
+                junit '**/target/surefire-reports/TEST*.xml'
+                archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
+                }
+            }
 }
