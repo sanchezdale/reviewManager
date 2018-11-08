@@ -21,8 +21,11 @@ pipeline {
             //Here should go the test
             steps{
                 dir('./reviewManager'){
-                junit 'mvn test'
+                sh 'mvn test'
                 }
+            }
+            post{
+                junit '**/target/TEST*.xml'
             }
         }
 
