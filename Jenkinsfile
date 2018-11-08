@@ -25,7 +25,9 @@ pipeline {
                 }
             }
             post{
+                success {
                 junit '**/target/TEST*.xml'
+                }
             }
         }
 
