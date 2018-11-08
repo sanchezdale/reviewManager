@@ -3,8 +3,14 @@ pipeline {
     stages{
         stage('Build') {
             steps{
-                echo 'Just testing....'
+                //here hould be the mvn build command
+                echo "mvn command"
             }
+        }
+
+        stage('Test'){
+            //Here should go the test
+            echo "Test Stage"
         }
     }
 }
