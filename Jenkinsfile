@@ -19,7 +19,7 @@ pipeline {
 
         stage('Build'){
             steps{
-                sh 'mvn package -Dbuild.number=${BUILD_NUMBER}'
+                sh 'mvn package -Dbuild.number=${BUILD_NUMBER}' 
             }
         }
         stage('Test'){
