@@ -17,16 +17,20 @@ pipeline {
             }
         }
 
-        stage('Build'){
-            steps{
-                sh 'mvn package -Dbuild.number=${BUILD_NUMBER}' 
-            }
-        }
         stage('Test'){
             //Here should go the test
             steps{
+                dir('./reviewManager')
                 junit 'mvn test'
             }
         }
+
+        stage('Build'){
+            steps{
+                dir('./reviewManager')
+                sh 'mvn package -Dbuild.number=${BUILD_NUMBER}' 
+            }
+        }
+        
     }
 }
