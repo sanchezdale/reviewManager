@@ -4,14 +4,14 @@ pipeline {
         stage('Build') {
             steps{
                 //here hould be the mvn build command
-                echo "mvn command"
+                sh "mvn package -Dbuild.number=${BUILD_NUMBER}"
             }
         }
 
         stage('Test'){
             //Here should go the test
             steps{
-                echo "Test Stage lol"
+                sh "mvn test"
             }
         }
     }
