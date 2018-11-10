@@ -1,6 +1,7 @@
 package me.sanchezdale.reviewManager.data;
 
 import com.mongodb.ConnectionString;
+import com.mongodb.MongoException;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -33,8 +34,16 @@ public class MongoConnectionFactory {
     public MongoConnectionFactory(@Value("${mongodb.url}") String url,@Value("${mongodb.database}") String db){
         logger.info(url);
         ConnectionString address = new ConnectionString(url);
-        MongoClient client = MongoClients.create(address);
-        this.database = client.getDatabase(db);
+        MongoClient client = null;
+        try {
+            client = MongoClients.create(address);
+        }catch (MongoException mongoExcepton){
+            logger.warn(mongoExcepton.getMessage());
+            client = null;
+        }finally {
+            if(client != null)
+                this.database = client.getDatabase(db);
+        }
     }
 
     public MongoDatabase getMongoDatabase(){

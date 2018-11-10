@@ -1,12 +1,24 @@
 package me.sanchezdale.reviewManager.data;
 
+import com.mongodb.client.MongoCollection;
+import org.bson.Document;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
+@Repository
 public class OrganizationRepositoryMongoImpl implements OrganizationRepository {
 
-    @Override
-    public void createOrganization() {
+    private MongoCollection collection;
 
+    @Autowired
+    public OrganizationRepositoryMongoImpl(MongoConnectionFactory connectionFactory) {
+        this.collection = connectionFactory.getMongoDatabase().getCollection("Organization");
+    }
+
+    @Override
+    public void createOrganization(Organization organization) {
     }
 
     @Override

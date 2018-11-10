@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface OrganizationRepository {
 
-    public void createOrganization();
+    public void createOrganization(Organization organization);
 
     public Organization updateOrganization(Organization organization);
 
