@@ -19,6 +19,10 @@ public class OrganizationRepositoryMongoImpl implements OrganizationRepository {
 
     @Override
     public void createOrganization(Organization organization) {
+        if(organization != null) {
+            Document doc = new Document().append("UUID", organization.getUuid()).append("name", organization.getName());
+            this.collection.insertOne(doc);
+        }
     }
 
     @Override

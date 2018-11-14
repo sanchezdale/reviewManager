@@ -1,5 +1,6 @@
 package me.sanchezdale.reviewManager.data;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class Organization {
@@ -17,7 +18,7 @@ public class Organization {
         this.name = name;
     }
 
-    public Organization(String UUID, String name) {
+    protected Organization(String UUID, String name) {
         this.uuid = UUID;
         this.name = name;
     }
@@ -37,4 +38,27 @@ public class Organization {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Organization that = (Organization) o;
+        return Objects.equals(uuid, that.uuid) &&
+                Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uuid, name);
+    }
+
+    @Override
+    public String toString() {
+        return "Organization{" +
+                "uuid='" + uuid + '\'' +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
+

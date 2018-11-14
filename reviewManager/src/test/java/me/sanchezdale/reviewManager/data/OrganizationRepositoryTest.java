@@ -1,5 +1,7 @@
 package me.sanchezdale.reviewManager.data;
 
+import org.bson.Document;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -86,6 +88,19 @@ public class OrganizationRepositoryTest {
         List<Organization> retrievedList = organizationRepository.listOrganizations();
 
         Assert.assertEquals(orgs,retrievedList);
+    }
+
+
+    @After
+    public void cleanUp(){
+
+        List<Document> documents = new ArrayList<>();
+
+        for (Organization org : orgs){
+            documents.add(new Document().append("UUID",org.getUuid()).append("name",org.getName()));
+        }
+        Document listofdocs = new Document().append("Organizations",documents);
+        this.connectionFactory.getMongoDatabase().getCollection("Organization").deleteMany(listofdocs);
     }
 
 
