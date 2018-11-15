@@ -1,6 +1,7 @@
 package me.sanchezdale.reviewManager.data;
 
 import org.bson.Document;
+import static com.mongodb.client.model.Filters.*;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -43,7 +44,9 @@ public class OrganizationRepositoryTest {
 
         long count = connectionFactory.getMongoDatabase().getCollection("Organization").countDocuments();
 
-        Assert.assertEquals(count,1);
+        Organization org = deserializeOrganization(connectionFactory.getMongoDatabase().getCollection("Organization").find(eq("UUID",orgs.get(0).getUuid())).first());
+        Assert.assertEquals("The count on the databse differs to what was inserted",count,1);
+        Assert.assertEquals("The Organization info received does not corresponds to the info persisted", orgs.get(0), org);
     }
 
     @Test
@@ -54,7 +57,7 @@ public class OrganizationRepositoryTest {
 
         long count = connectionFactory.getMongoDatabase().getCollection("Organization").countDocuments();
 
-        Assert.assertEquals(count, 0);
+        Assert.assertEquals("The database cointains more that what it should have",count, 0);
 
     }
 
@@ -68,10 +71,10 @@ public class OrganizationRepositoryTest {
 
         organizationRepository.updateOrganization(updated);
 
-        Organization retrieved = organizationRepository.retrieveOrganization(updated);
+        Organization retrieved = deserializeOrganization(connectionFactory.getMongoDatabase().getCollection("Organization").find(eq("UUID",orgs.get(0).getUuid())).first());
 
         long count = connectionFactory.getMongoDatabase().getCollection("Organization").countDocuments();
-
+        
 
         Assert.assertEquals(updated,retrieved);
 
@@ -103,5 +106,9 @@ public class OrganizationRepositoryTest {
         this.connectionFactory.getMongoDatabase().getCollection("Organization").deleteMany(listofdocs);
     }
 
-
+    private Organization deserializeOrganization(Document doc){
+        Organization org = new Organization(doc.getString("name"));
+        org.setUuid(doc.getString("UUID"));
+        return org;
+    }
 }
