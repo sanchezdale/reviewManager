@@ -98,7 +98,11 @@ public class OrganizationRepositoryTest {
     @After
     public void cleanUp(){
 
-        this.connectionFactory.getMongoDatabase().getCollection("Organization").deleteOne(new Document());
+        for (Organization org : orgs){
+
+            this.connectionFactory.getMongoDatabase().getCollection("Organization").findOneAndDelete(eq("UUID",org.getUuid()));
+        }
+
     }
 
     private Organization deserializeOrganization(Document doc){
