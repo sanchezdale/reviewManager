@@ -1,6 +1,7 @@
 package me.sanchezdale.reviewManager.data;
 
 import com.mongodb.client.model.DeleteOptions;
+import com.mongodb.DuplicateKeyException;
 import org.bson.Document;
 import static com.mongodb.client.model.Filters.*;
 import org.junit.After;
@@ -105,9 +106,17 @@ public class OrganizationRepositoryTest {
 
     }
 
+    @Test(expected=DuplicateKeyException.class)
+    public void testNegativeCreateOrganizationWithExistingUuid(){
+        this.organizationRepository.createOrganization(orgs.get(0));
+        orgs.get(0).setName("New name");
+        this.organizationRepository.createOrganization(orgs.get(0));
+    }
+
     private Organization deserializeOrganization(Document doc){
         Organization org = new Organization(doc.getString("name"));
         org.setUuid(doc.getString("UUID"));
         return org;
     }
+
 }
