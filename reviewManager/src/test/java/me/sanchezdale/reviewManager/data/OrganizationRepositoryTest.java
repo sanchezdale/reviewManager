@@ -1,5 +1,6 @@
 package me.sanchezdale.reviewManager.data;
 
+import com.mongodb.client.model.DeleteOptions;
 import org.bson.Document;
 import org.junit.After;
 import org.junit.Assert;
@@ -94,13 +95,7 @@ public class OrganizationRepositoryTest {
     @After
     public void cleanUp(){
 
-        List<Document> documents = new ArrayList<>();
-
-        for (Organization org : orgs){
-            documents.add(new Document().append("UUID",org.getUuid()).append("name",org.getName()));
-        }
-        Document listofdocs = new Document().append("Organizations",documents);
-        this.connectionFactory.getMongoDatabase().getCollection("Organization").deleteMany(listofdocs);
+        this.connectionFactory.getMongoDatabase().getCollection("Organization").deleteOne(new Document());
     }
 
 
