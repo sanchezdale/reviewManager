@@ -5,6 +5,7 @@ import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Updates.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,51 +13,41 @@ import java.util.List;
 @Repository
 public class OrganizationRepositoryMongoImpl implements OrganizationRepository {
 
-    private MongoCollection<Document> collection;
+    public static final String UUID_FIELD_NAME = "uuid";
+    private MongoCollection<Organization> collection;
 
     @Autowired
     public OrganizationRepositoryMongoImpl(MongoConnectionFactory connectionFactory) {
-        this.collection = connectionFactory.getMongoDatabase().getCollection("Organization");
+        this.collection = connectionFactory.getMongoDatabase().getCollection("Organization",Organization.class);
     }
 
     @Override
     public void createOrganization(Organization organization) {
         if(organization != null) {
-            Document doc = new Document().append("UUID", organization.getUuid()).append("name", organization.getName());
-            this.collection.insertOne(doc);
+            this.collection.insertOne(organization);
         }
     }
 
     @Override
-    public Organization updateOrganization(Organization organization) {
-        Document newDoc = new Document().append("name",organization.getName());
-        Document update = (Document) this.collection.findOneAndUpdate(eq("UUID"),newDoc);
-        return deserializeOrganization(update);
+    public boolean updateOrganization(Organization organization) {
+
+        return this.collection.updateOne(eq(UUID_FIELD_NAME,organization.getUuid()),set("name",organization.getName())).wasAcknowledged();
     }
 
     @Override
     public Organization retrieveOrganization(Organization organization) {
-        return deserializeOrganization(this.collection.find(eq("UUID", organization.getUuid())).first());
+        return this.collection.find(eq(UUID_FIELD_NAME, organization.getUuid())).first();
     }
 
     @Override
     public List<Organization> listOrganizations() {
 
-        ArrayList<Document> documents = this.collection.find().into(new ArrayList<>());
-        ArrayList<Organization> orgs = new ArrayList<>(documents.size());
-
-        documents.forEach(document -> orgs.add(deserializeOrganization(document)));
-
-        return orgs;
+        return this.collection.find().into(new ArrayList<>());
     }
 
     @Override
     public Organization deleteOrganization(Organization organization) {
-        return deserializeOrganization(this.collection.findOneAndDelete(eq("UUID", organization.getUuid())));
+        return this.collection.findOneAndDelete(eq(UUID_FIELD_NAME, organization.getUuid()));
     }
 
-    private Organization deserializeOrganization(Document doc){
-        Organization org = new Organization(doc.getString("UUID"),doc.getString("name"));
-        return org;
-    }
 }

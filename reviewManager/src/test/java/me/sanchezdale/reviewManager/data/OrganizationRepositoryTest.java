@@ -1,5 +1,6 @@
 package me.sanchezdale.reviewManager.data;
 
+import com.mongodb.MongoWriteException;
 import com.mongodb.client.model.DeleteOptions;
 import com.mongodb.DuplicateKeyException;
 import org.bson.Document;
@@ -29,14 +30,13 @@ public class OrganizationRepositoryTest {
     @Autowired
     MongoConnectionFactory connectionFactory;
 
-    List<Organization> orgs = new ArrayList<>();
+    private List<Organization> orgs = new ArrayList<>();
 
     @Before
     public void createData(){
         orgs.add(new Organization("test org"));
         orgs.add(new Organization("test org 2"));
         orgs.add(new Organization("test org 3"));
-
 
     }
 
@@ -46,7 +46,7 @@ public class OrganizationRepositoryTest {
 
         long count = connectionFactory.getMongoDatabase().getCollection("Organization").countDocuments();
 
-        Organization org = deserializeOrganization(connectionFactory.getMongoDatabase().getCollection("Organization").find(eq("UUID",orgs.get(0).getUuid())).first());
+        Organization org = deserializeOrganization(connectionFactory.getMongoDatabase().getCollection("Organization").find(eq("uuid",orgs.get(0).getUuid())).first());
         Assert.assertEquals("The count on the databse differs to what was inserted",count,1);
         Assert.assertEquals("The Organization info received does not corresponds to the info persisted", orgs.get(0), org);
     }
@@ -73,7 +73,7 @@ public class OrganizationRepositoryTest {
 
         organizationRepository.updateOrganization(updated);
 
-        Organization retrieved = deserializeOrganization(connectionFactory.getMongoDatabase().getCollection("Organization").find(eq("UUID",orgs.get(0).getUuid())).first());
+        Organization retrieved = deserializeOrganization(connectionFactory.getMongoDatabase().getCollection("Organization").find(eq("uuid",orgs.get(0).getUuid())).first());
 
         long count = connectionFactory.getMongoDatabase().getCollection("Organization").countDocuments();
         
@@ -91,7 +91,6 @@ public class OrganizationRepositoryTest {
         }
 
         List<Organization> retrievedList = organizationRepository.listOrganizations();
-
         Assert.assertEquals(orgs,retrievedList);
     }
 
@@ -101,12 +100,12 @@ public class OrganizationRepositoryTest {
 
         for (Organization org : orgs){
 
-            this.connectionFactory.getMongoDatabase().getCollection("Organization").findOneAndDelete(eq("UUID",org.getUuid()));
+            this.connectionFactory.getMongoDatabase().getCollection("Organization").findOneAndDelete(eq("uuid",org.getUuid()));
         }
 
     }
 
-    @Test(expected=DuplicateKeyException.class)
+    @Test(expected=MongoWriteException.class)
     public void testNegativeCreateOrganizationWithExistingUuid(){
         this.organizationRepository.createOrganization(orgs.get(0));
         orgs.get(0).setName("New name");
@@ -115,7 +114,7 @@ public class OrganizationRepositoryTest {
 
     private Organization deserializeOrganization(Document doc){
         Organization org = new Organization(doc.getString("name"));
-        org.setUuid(doc.getString("UUID"));
+        org.setUuid(doc.getString("uuid"));
         return org;
     }
 

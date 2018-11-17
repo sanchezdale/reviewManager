@@ -4,13 +4,13 @@ import java.util.List;
 
 public interface OrganizationRepository {
 
-    public void createOrganization(Organization organization);
+    void createOrganization(Organization organization);
 
-    public Organization updateOrganization(Organization organization);
+    boolean updateOrganization(Organization organization);
 
-    public Organization retrieveOrganization(Organization organization);
+    Organization retrieveOrganization(Organization organization);
 
-    public List<Organization> listOrganizations();
+    List<Organization> listOrganizations();
 
-    public Organization deleteOrganization(Organization organization);
+    Organization deleteOrganization(Organization organization);
 }

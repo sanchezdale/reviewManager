@@ -7,20 +7,17 @@ public class User {
     private String username;
     private String firstName;
     private String lastName;
-
     private Organization organization;
 
-    private String Email;
 
 
     public User(){}
 
-    public User(String username, String firstName, String lastName, Organization organization, String email) {
+    public User(String username, String firstName, String lastName, Organization organization) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.organization = organization;
-        Email = email;
     }
 
     public String getUsername() {
@@ -55,13 +52,6 @@ public class User {
         this.organization = organization;
     }
 
-    public String getEmail() {
-        return Email;
-    }
-
-    public void setEmail(String email) {
-        Email = email;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -71,13 +61,12 @@ public class User {
         return Objects.equals(username, user.username) &&
                 Objects.equals(firstName, user.firstName) &&
                 Objects.equals(lastName, user.lastName) &&
-                Objects.equals(organization, user.organization) &&
-                Objects.equals(Email, user.Email);
+                Objects.equals(organization, user.organization);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(username, firstName, lastName, organization, Email);
+        return Objects.hash(username, firstName, lastName, organization);
     }
 
     @Override
@@ -87,7 +76,6 @@ public class User {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", organization=" + organization +
-                ", Email='" + Email + '\'' +
                 '}';
     }
 }

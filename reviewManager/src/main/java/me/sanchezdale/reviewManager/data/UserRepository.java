@@ -4,13 +4,13 @@ import java.util.List;
 
 public interface UserRepository {
 
-    public void createUser();
+    void createUser(User user);
 
-    public User deleteUser();
+    User deleteUser(User user);
 
-    public User rtrieveUser(User user);
+    User rerieveUser(User user);
 
-    public List<User> retrieveUsers();
+    List<User> retrieveUsers();
 
-    public User updateUser(User user);
+    boolean updateUser(User user);
 }

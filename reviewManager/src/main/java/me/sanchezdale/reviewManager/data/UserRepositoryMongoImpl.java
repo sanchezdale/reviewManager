@@ -1,21 +1,24 @@
 package me.sanchezdale.reviewManager.data;
 
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
+@Repository
 public class UserRepositoryMongoImpl implements UserRepository {
 
     @Override
-    public void createUser() {
+    public void createUser(User user) {
 
     }
 
     @Override
-    public User deleteUser() {
+    public User deleteUser(User user) {
         return null;
     }
 
     @Override
-    public User rtrieveUser(User user) {
+    public User rerieveUser(User user) {
         return null;
     }
 
@@ -25,7 +28,7 @@ public class UserRepositoryMongoImpl implements UserRepository {
     }
 
     @Override
-    public User updateUser(User user) {
-        return null;
+    public boolean updateUser(User user) {
+        return true;
     }
 }
