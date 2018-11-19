@@ -10,7 +10,11 @@ public interface UserRepository {
 
     User rerieveUser(User user);
 
+    User retrieveUserByUsername(String username);
+
     List<User> retrieveUsers();
 
     boolean updateUser(User user);
+
+
 }
